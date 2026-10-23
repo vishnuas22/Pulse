@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, NavLink, Route, Routes } from 'react-router';
+import { Link, NavLink, Outlet, Route, Routes } from 'react-router';
 import { Plus, Settings } from 'lucide-react';
 import { HabitsProvider, useHabits } from './HabitsProvider';
 import { AppUiProvider, useAppUi } from './ui-context';
@@ -7,6 +7,7 @@ import { Button } from '@/ui/Button';
 import { EmptyState } from '@/ui/EmptyState';
 import { Modal } from '@/ui/Modal';
 import { ToastProvider } from '@/ui/Toast';
+import { StudioPage } from '@/features/studio/StudioPage';
 import { DetailView } from '@/features/habits/DetailView';
 import { HabitForm } from '@/features/habits/HabitForm';
 import { ManageView } from '@/features/habits/ManageView';
@@ -80,6 +81,9 @@ function Layout() {
             <NavLink to="/habits" end className={({ isActive }) => cn(NAV, isActive ? 'text-ink' : 'text-ink-3 hover:text-ink')}>
               Manage
             </NavLink>
+            <NavLink to="/studio" className={({ isActive }) => cn(NAV, isActive ? 'text-accent' : 'text-ink-3 hover:text-ink')}>
+              Studio
+            </NavLink>
           </nav>
 
           <div className="flex items-center gap-1">
@@ -100,13 +104,7 @@ function Layout() {
       </header>
 
       <main id="content" className="mx-auto w-full max-w-[768px] px-6 pb-28">
-        <Routes>
-          <Route path="/" element={<TodayView />} />
-          <Route path="/habits" element={<ManageView />} />
-          <Route path="/habits/:id" element={<DetailView />} />
-          <Route path="/settings" element={<SettingsView />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Outlet />
       </main>
 
       <Modal open={createOpen} onClose={closeCreate} title="New habit">
@@ -128,7 +126,16 @@ export function App() {
     <ToastProvider>
       <HabitsProvider>
         <AppUiProvider>
-          <Layout />
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<TodayView />} />
+              <Route path="/habits" element={<ManageView />} />
+              <Route path="/habits/:id" element={<DetailView />} />
+              <Route path="/settings" element={<SettingsView />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+            <Route path="/studio" element={<StudioPage />} />
+          </Routes>
         </AppUiProvider>
       </HabitsProvider>
     </ToastProvider>
