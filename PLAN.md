@@ -120,9 +120,10 @@ export interface HabitApi {
   getHabit(id: HabitId): Promise<Habit>;
   createHabit(input: NewHabit): Promise<Habit>;
   updateHabit(id: HabitId, patch: HabitPatch): Promise<Habit>;
-  deleteHabit(id: HabitId): Promise<void>;
+  deleteHabit(id: HabitId): Promise<DeletedHabit>;   // returns habit + logs for client-side undo
 
   listLogs(habitId: HabitId): Promise<DateKey[]>;
+  listAllLogs(): Promise<Record<HabitId, DateKey[]>>;  // one round-trip for the whole ledger
   setLog(habitId: HabitId, date: DateKey): Promise<void>;     // idempotent upsert
   clearLog(habitId: HabitId, date: DateKey): Promise<void>;   // idempotent
 }
@@ -157,8 +158,9 @@ export class ApiError extends Error {
 | getHabit | GET | `/api/habits/:id` | 200 | 404 |
 | createHabit | POST | `/api/habits` | 201 `Habit` | 400, 409 name conflict |
 | updateHabit | PATCH | `/api/habits/:id` | 200 | 400, 404 |
-| deleteHabit | DELETE | `/api/habits/:id` | 204 | 404 |
+| deleteHabit | DELETE | `/api/habits/:id` | 200 `{ habit, logs }` | 404 |
 | listLogs | GET | `/api/habits/:id/logs` | 200 `DateKey[]` | 404 |
+| listAllLogs | GET | `/api/logs` | 200 `Record<id, DateKey[]>` | — |
 | setLog | PUT | `/api/habits/:id/logs/:date` | 204 | 400 |
 | clearLog | DELETE | `/api/habits/:id/logs/:date` | 204 | 404 |
 

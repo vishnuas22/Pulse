@@ -6,7 +6,7 @@ import { AppUiProvider, useAppUi } from './ui-context';
 import { Button } from '@/ui/Button';
 import { EmptyState } from '@/ui/EmptyState';
 import { Modal } from '@/ui/Modal';
-import { ToastProvider, useToast } from '@/ui/Toast';
+import { ToastProvider } from '@/ui/Toast';
 import { DetailView } from '@/features/habits/DetailView';
 import { HabitForm } from '@/features/habits/HabitForm';
 import { ManageView } from '@/features/habits/ManageView';
@@ -33,7 +33,6 @@ function NotFound() {
 function Layout() {
   const { create } = useHabits();
   const { createOpen, openCreate, closeCreate } = useAppUi();
-  const toast = useToast();
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -114,13 +113,9 @@ function Layout() {
         <HabitForm
           onCancel={closeCreate}
           onSubmit={async (input) => {
-            await create(input).catch((e: unknown) => {
-              toast.push({
-                kind: 'danger',
-                message: e instanceof Error ? e.message : 'Could not create the habit.',
-              });
-              throw e; // let the form keep its state and show the banner
-            });
+            // Throws on failure (the form renders the banner); closes only on success.
+            await create(input);
+            closeCreate();
           }}
         />
       </Modal>

@@ -30,13 +30,16 @@ export function HistoryGrid({ logs }: { logs: DateKey[] }) {
     const outCells: Cell[] = [];
     const labels: Array<{ col: number; label: string; key: DateKey }> = [];
     let lastMonth = '';
+    let lastCol = -1;
     for (let w = 0; w < WEEKS; w += 1) {
       const monday = addDays(start, w * 7);
       const month = formatMonth(monday);
-      const showLabel = w === 0 || (month !== lastMonth && weekdayOfMonday(monday) === 0);
-      if (showLabel && month !== lastMonth) {
+      // Label a month change only when there is room: a label sits in one 11px
+      // column but the text is wider, so two labels one column apart collide.
+      if (month !== lastMonth && (lastCol === -1 || w - lastCol >= 2)) {
         labels.push({ col: w, label: month, key: monday });
         lastMonth = month;
+        lastCol = w;
       }
       for (let r = 0; r < 7; r += 1) {
         const date = addDays(start, w * 7 + r);
