@@ -1,0 +1,36 @@
+/* Hand-picked palette — warm paper, inky neutrals, one signal accent.
+   All values deliberate; see PLAN.md §7 before changing anything. */
+:root {
+  --paper: #f6f5f1;
+  --surface: #ffffff;
+  --ink: #1a1918;
+  --ink-2: #57534e;
+  --ink-3: #a8a29e;
+  --hairline: #e7e5e1;
+  --accent: #bf3b1b;
+  --accent-hover: #a43216;
+
+  --shadow-rest: 0 1px 2px rgb(26 25 24 / 0.06);
+  --shadow-raised: 0 8px 24px rgb(26 25 24 / 0.1);
+
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-fast: 120ms;
+  --dur: 180ms;
+  --dur-slow: 240ms;
+
+  /* Habit accent swatches — muted, non-default, no blues or violets. */
+  --a-ember: #bf3b1b;
+  --a-moss: #5f6d22;
+  --a-honey: #96690a;
+  --a-pine: #2f5d50;
+  --a-graphite: #44474b;
+
+  /* History grid ramp (accent mixed into paper). Reserved for value-scale v2;
+     v1 renders binary today/no-today. Kept here as design tokens. */
+  --heat-0: #e7e5e1;
+  --heat-1: #efdfd7;
+  --heat-2: #e6c1b5;
+  --heat-3: #dc9b8a;
+  --heat-4: #ce6f57;
+  --heat-5: #bf3b1b;
+}
