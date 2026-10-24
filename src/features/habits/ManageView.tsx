@@ -89,9 +89,11 @@ export function ManageView() {
 
   return (
     <section>
-      <header className="pt-10 pb-6">
-        <p className="mono-label text-ink-3">Manage</p>
-        <h1 className="mt-2 font-serif text-[40px] leading-[1.05] text-ink">All habits</h1>
+      <header className="pt-12 pb-8">
+        <div className="border-b-2 border-ink pb-6">
+          <p className="mono-label text-ink-3">Manage</p>
+          <h1 className="mt-3 font-serif text-[48px] leading-none text-ink">All habits</h1>
+        </div>
       </header>
 
       <div className="flex items-center gap-3 pb-4">
@@ -133,10 +135,16 @@ export function ManageView() {
           }
         />
       ) : (
+        <>
+          <div aria-hidden className="flex justify-between border-b border-hairline pb-1.5 font-mono text-[9px] tracking-[0.14em] text-ink-3 uppercase max-sm:hidden">
+            <span className="pl-[92px]">Entry</span>
+            <span className="pr-1">Streak · Target</span>
+          </div>
         <div className="border-t border-hairline">
-          {sorted.map((habit) => (
+          {sorted.map((habit, i) => (
             <HabitRow
               key={habit.id}
+              index={i}
               habit={habit}
               dates={logs[habit.id] ?? []}
               pending={pending.includes(habit.id)}
@@ -147,7 +155,8 @@ export function ManageView() {
               showTarget
             />
           ))}
-        </div>
+          </div>
+        </>
       )}
 
       {archived.length > 0 && (

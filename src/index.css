@@ -5,6 +5,7 @@
    reference the variables directly; tokens.css stays the single source. */
 @theme inline {
   --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
   --color-surface: var(--surface);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
@@ -67,6 +68,9 @@
   .row-in {
     animation: row-in var(--dur) var(--ease);
   }
+  .stamp-in {
+    animation: stamp-in 240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 }
 
 @keyframes modal-in {
@@ -84,6 +88,21 @@
   from {
     opacity: 0;
     transform: translateY(4px);
+  }
+}
+/* The check-in stamp: lands like a rubber stamp on the ledger line. */
+@keyframes stamp-in {
+  0% {
+    transform: scale(0.55) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.14) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
   }
 }
 

@@ -8,7 +8,7 @@ import { ChevronDown, Minus, Plus } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 const BASE =
-  'rounded-input border bg-surface text-ink transition-colors duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] placeholder:text-ink-3 focus:outline-none';
+  'bg-transparent text-ink transition-colors duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] placeholder:text-ink-3 focus:outline-none';
 
 export function Field({
   label,
@@ -44,8 +44,8 @@ export function Input({ invalid = false, className, ...rest }: InputHTMLAttribut
     <input
       className={cn(
         BASE,
-        'h-10 w-full px-3 text-[15px]',
-        invalid ? 'border-accent focus:border-accent' : 'border-hairline focus:border-ink',
+        'h-10 w-full border-b px-0.5 text-[15px]',
+        invalid ? 'border-accent' : 'border-hairline focus:border-ink',
         className,
       )}
       {...rest}
@@ -58,7 +58,7 @@ export function Textarea({ invalid = false, className, ...rest }: TextareaHTMLAt
     <textarea
       className={cn(
         BASE,
-        'w-full min-h-[96px] resize-y px-3 py-2.5 leading-normal',
+        'w-full min-h-[96px] resize-y rounded-card border bg-surface px-3 py-2.5 leading-normal',
         invalid ? 'border-accent focus:border-accent' : 'border-hairline focus:border-ink',
         className,
       )}
@@ -73,7 +73,7 @@ export function Select({ className, ...rest }: SelectHTMLAttributes<HTMLSelectEl
       <select
         className={cn(
           BASE,
-          'h-9 w-full appearance-none pr-9 pl-3 text-[13px]',
+          'h-9 w-full appearance-none border-b pr-9 pl-0.5 text-[13px]',
           'border-hairline focus:border-ink',
           className,
         )}

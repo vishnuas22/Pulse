@@ -28,7 +28,7 @@ export function ErrorState({ message, onRetry }: { message?: string; onRetry: ()
         <button
           type="button"
           onClick={onRetry}
-          className="mt-1 h-8 rounded-input border border-hairline bg-surface px-2.5 text-[12px] font-medium text-ink transition-colors duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] hover:border-ink-3"
+          className="mt-1 h-8 rounded-input border border-ink/30 bg-transparent px-2.5 font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-ink transition-colors duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] hover:border-ink hover:bg-paper-2"
         >
           Retry
         </button>

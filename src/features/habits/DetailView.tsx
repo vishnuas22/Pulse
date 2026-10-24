@@ -96,8 +96,8 @@ export function DetailView() {
         </div>
       </header>
 
-      <section className="mt-8 overflow-hidden rounded-card border border-hairline">
-        <dl className="grid grid-cols-2 gap-px bg-hairline sm:grid-cols-4">
+      <section className="mt-8 border-y border-ink/80">
+        <dl className="grid grid-cols-2 divide-x divide-hairline sm:grid-cols-4 max-sm:divide-y">
           {(
             [
               ['Current streak', currentStreak(dates)],
@@ -106,9 +106,9 @@ export function DetailView() {
               ['Total check-ins', dates.length],
             ] as const
           ).map(([label, value]) => (
-            <div key={label} className="bg-surface px-4 py-3">
+            <div key={label} className="px-4 py-4 first:border-l-0">
               <dt className="mono-label text-ink-3">{label}</dt>
-              <dd className="tnum mt-2 font-mono text-[24px] leading-none text-ink">{value}</dd>
+              <dd className="tnum mt-3 font-serif text-[34px] leading-none text-ink">{value}</dd>
             </div>
           ))}
         </dl>

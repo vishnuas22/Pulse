@@ -24,7 +24,7 @@ const CSS = `
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='240' height='240' filter='url(%23n)' opacity='0.6'/></svg>");
   animation: studioGrain 1.4s steps(8) infinite; }
 @keyframes studioGrain { 0%,100%{transform:translate(0,0)} 12%{transform:translate(-2%,1.6%)} 25%{transform:translate(1.4%,-1.2%)} 37%{transform:translate(-1.2%,2%)} 50%{transform:translate(2%,0.8%)} 62%{transform:translate(-1.6%,-1.8%)} 75%{transform:translate(1.2%,1.4%)} 87%{transform:translate(-0.8%,-0.6%)} }
-.holo-breath { animation: holoBreath 5.5s ease-in-out infinite; transform-box: view-box; transform-origin:210px 360px; }
+.holo-breath { animation: holoBreath 5.5s ease-in-out infinite; transform-box: view-box; transform-origin:210px 340px; }
 @keyframes holoBreath { 0%,100%{ transform: scale(1);} 50%{ transform: scale(1.015) translateY(-3px);} }
 .holo-draw { stroke-dasharray:1; stroke-dashoffset:1; animation: holoDraw 1.2s cubic-bezier(.2,0,0,1) forwards; }
 @keyframes holoDraw { to { stroke-dashoffset:0; } }

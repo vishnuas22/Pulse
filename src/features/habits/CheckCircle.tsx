@@ -3,6 +3,7 @@ import type { AccentKey } from '@/api/types';
 import { ACCENT_CLASSES } from '@/lib/accents';
 import { cn } from '@/lib/cn';
 
+/** The day's ledger stamp: a seal that drops onto the line when checked. */
 export function CheckCircle({
   checked,
   accent,
@@ -26,11 +27,11 @@ export function CheckCircle({
       title={checked ? 'Remove check-in for today' : 'Check in for today'}
       onClick={onToggle}
       className={cn(
-        'flex size-7 shrink-0 items-center justify-center rounded-full border transition-[border-color,background-color] duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] hover:border-ink disabled:opacity-50',
-        checked ? ACCENT_CLASSES[accent].filled : 'border-ink-3 bg-transparent',
+        'flex size-8 shrink-0 items-center justify-center rounded-full border-[1.5px] transition-all duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] active:scale-90 disabled:opacity-50',
+        checked ? cn('stamp-in', ACCENT_CLASSES[accent].filled) : 'border-ink/30 bg-transparent hover:border-ink hover:bg-paper-2',
       )}
     >
-      {checked && <Check size={14} strokeWidth={2.5} className="text-white" aria-hidden />}
+      {checked && <Check size={15} strokeWidth={3} className="text-paper" aria-hidden />}
     </button>
   );
 }

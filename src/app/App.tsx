@@ -67,43 +67,60 @@ function Layout() {
         Skip to content
       </a>
 
-      <header className="border-b border-hairline">
-        <div className="mx-auto flex h-16 w-full max-w-[768px] items-center justify-between px-6">
-          <Link to="/" className="flex items-baseline gap-1.5">
-            <span className="font-serif text-[20px] leading-none text-ink">Pulse</span>
-            <span aria-hidden className="mb-1 inline-block size-1.5 rounded-full bg-accent" />
-          </Link>
-
-          <nav aria-label="Primary" className="flex items-center gap-5">
-            <NavLink to="/" end className={({ isActive }) => cn(NAV, isActive ? 'text-ink' : 'text-ink-3 hover:text-ink')}>
-              Today
-            </NavLink>
-            <NavLink to="/habits" end className={({ isActive }) => cn(NAV, isActive ? 'text-ink' : 'text-ink-3 hover:text-ink')}>
-              Manage
-            </NavLink>
-            <NavLink to="/studio" className={({ isActive }) => cn(NAV, isActive ? 'text-accent' : 'text-ink-3 hover:text-ink')}>
-              Studio
-            </NavLink>
-          </nav>
-
-          <div className="flex items-center gap-1">
-            <Button size="sm" onClick={openCreate}>
-              <Plus size={14} aria-hidden />
-              New habit
-            </Button>
-            <Link
-              to="/settings"
-              aria-label="Settings"
-              title="Settings"
-              className="inline-flex size-8 shrink-0 items-center justify-center rounded-input text-ink-3 transition-colors duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] hover:bg-[#eceae5] hover:text-ink"
-            >
-              <Settings size={16} aria-hidden />
+      <header className="border-b-2 border-ink/85 bg-paper">
+        <div className="mx-auto w-full max-w-[840px] px-6">
+          <div className="flex h-[76px] items-center justify-between">
+            <Link to="/" className="flex items-baseline gap-2.5">
+              <span className="font-serif text-[27px] leading-none tracking-tight text-ink">
+                Pulse<span className="text-accent">.</span>
+              </span>
+              <span className="mono-label hidden text-[9px] text-ink-3 sm:inline">A habit ledger</span>
             </Link>
+
+            <nav aria-label="Primary" className="flex items-center gap-5">
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) => cn(NAV, isActive ? 'border-b-2 border-ink pb-0.5 text-ink' : 'border-b-2 border-transparent pb-0.5 text-ink-3 hover:text-ink')}
+              >
+                Today
+              </NavLink>
+              <NavLink
+                to="/habits"
+                end
+                className={({ isActive }) => cn(NAV, isActive ? 'border-b-2 border-ink pb-0.5 text-ink' : 'border-b-2 border-transparent pb-0.5 text-ink-3 hover:text-ink')}
+              >
+                Manage
+              </NavLink>
+              <NavLink
+                to="/studio"
+                className={({ isActive }) => cn(NAV, isActive ? 'border-b-2 border-accent pb-0.5 text-accent' : 'border-b-2 border-transparent pb-0.5 text-ink-3 hover:text-ink')}
+              >
+                Studio
+              </NavLink>
+            </nav>
+
+            <div className="flex items-center gap-1">
+              <Button size="sm" onClick={openCreate}>
+                <Plus size={14} aria-hidden />
+                New habit
+              </Button>
+              <Link
+                to="/settings"
+                aria-label="Settings"
+                title="Settings"
+                className="inline-flex size-8 shrink-0 items-center justify-center rounded-input text-ink-3 transition-colors duration-[120ms] ease-[cubic-bezier(0.2,0,0,1)] hover:bg-paper-2 hover:text-ink"
+              >
+                <Settings size={16} aria-hidden />
+              </Link>
+            </div>
           </div>
+          {/* the thin rule under the heavy one — a broadsheet's double keyline */}
+          <div aria-hidden className="border-b border-ink/25" />
         </div>
       </header>
 
-      <main id="content" className="mx-auto w-full max-w-[768px] px-6 pb-28">
+      <main id="content" className="mx-auto w-full max-w-[840px] px-6 pb-28">
         <Outlet />
       </main>
 

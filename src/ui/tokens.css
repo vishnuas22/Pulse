@@ -2,6 +2,7 @@
    All values deliberate; see PLAN.md §7 before changing anything. */
 :root {
   --paper: #f6f5f1;
+  --paper-2: #edebe5;
   --surface: #ffffff;
   --ink: #1a1918;
   --ink-2: #57534e;

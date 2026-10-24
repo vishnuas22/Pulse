@@ -8,6 +8,13 @@ import { useToast } from '@/ui/Toast';
 import { formatHuman, isoWeek, todayKey } from '@/lib/date';
 import { HabitRow } from './HabitRow';
 
+/** "Thursday, 23 October" → weekday / day / month-rest, typeset separately. */
+function splitHumanDate(human: string): { weekday: string; day: string; rest: string } | null {
+  const m = human.match(/^([^,]+),\s*(\d+)\s+(.+)$/);
+  if (!m) return null;
+  return { weekday: m[1], day: m[2], rest: m[3] };
+}
+
 export function TodayView() {
   const { status, error, habits, logs, pending, toggle, refresh } = useHabits();
   const { openCreate } = useAppUi();
@@ -21,16 +28,38 @@ export function TodayView() {
     .filter((h) => h.archivedAt === null)
     .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   const done = active.filter((h) => (logs[h.id] ?? []).includes(today)).length;
+  const pct = active.length === 0 ? 0 : Math.round((done / active.length) * 100);
+  const date = splitHumanDate(formatHuman(today));
 
   return (
     <section>
-      <header className="pt-10 pb-6">
-        <p className="mono-label text-ink-3">Today · week {isoWeek(today)}</p>
-        <h1 className="mt-2 font-serif text-[40px] leading-[1.05] text-ink">{formatHuman(today)}</h1>
-        <p className="tnum mt-2 font-mono text-[12px] text-ink-2">
-          {done} of {active.length} checked in
-          {active.length > 0 && done === active.length ? ' — all clear' : ''}
-        </p>
+      <header className="pt-12 pb-10">
+        <div className="flex items-end justify-between gap-8 border-b-2 border-ink pb-8">
+          <div className="min-w-0">
+            <p className="mono-label text-ink-3">The daily record · week {isoWeek(today)}</p>
+            <h1 className="mt-4 font-serif text-[56px] leading-[0.92] text-ink sm:text-[72px]">
+              <span className="block">{date ? date.weekday : formatHuman(today)}</span>
+              {date && (
+                <span className="block">
+                  {date.day}&nbsp;
+                  <em className="text-ink-2">{date.rest}</em>
+                </span>
+              )}
+            </h1>
+          </div>
+
+          <div className="shrink-0 text-right">
+            <p className="mono-label text-ink-3">Checked in</p>
+            <p aria-hidden className="tnum mt-2 font-serif leading-[0.8]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              <span className="text-[64px] text-ink sm:text-[76px]">{done}</span>
+              <span className="text-[30px] text-ink-3 sm:text-[36px]">/{active.length}</span>
+            </p>
+            <p className="tnum mt-3 font-mono text-[12px] text-ink-2">
+              {done} of {active.length} checked in
+              {active.length > 0 && done === active.length ? ' — all clear' : ''}
+            </p>
+          </div>
+        </div>
       </header>
 
       {active.length === 0 ? (
@@ -45,24 +74,35 @@ export function TodayView() {
           }
         />
       ) : (
-        <div className="border-t border-hairline">
-          {active.map((habit) => (
-            <HabitRow
-              key={habit.id}
-              habit={habit}
-              dates={logs[habit.id] ?? []}
-              pending={pending.includes(habit.id)}
-              onToggle={() => {
-                void toggle(habit.id).catch((e: unknown) => {
-                  toast.push({
-                    kind: 'danger',
-                    message: e instanceof Error ? e.message : 'Could not save the check-in.',
+        <>
+          <div className="border-t border-hairline">
+            {active.map((habit, i) => (
+              <HabitRow
+                key={habit.id}
+                index={i}
+                habit={habit}
+                dates={logs[habit.id] ?? []}
+                pending={pending.includes(habit.id)}
+                onToggle={() => {
+                  void toggle(habit.id).catch((e: unknown) => {
+                    toast.push({
+                      kind: 'danger',
+                      message: e instanceof Error ? e.message : 'Could not save the check-in.',
+                    });
                   });
-                });
-              }}
-            />
-          ))}
-        </div>
+                }}
+              />
+            ))}
+          </div>
+
+          {/* the bookkeeper's closing rule */}
+          <div className="flex items-baseline justify-between border-b-2 border-ink pt-4">
+            <p className="mono-label text-ink-3">Day total</p>
+            <p className="tnum font-mono text-[13px] text-ink">
+              {done}/{active.length} <span className="text-ink-3">· {pct}%</span>
+            </p>
+          </div>
+        </>
       )}
     </section>
   );

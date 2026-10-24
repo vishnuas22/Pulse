@@ -94,7 +94,11 @@ export function HistoryGrid({ logs }: { logs: DateKey[] }) {
                   key={c.date}
                   title={c.filled ? `${formatHuman(c.date)} — checked in` : `${formatHuman(c.date)} — no check-in`}
                   style={{ gridColumn: c.col + 1, gridRow: c.row + 2 }}
-                  className={cn('size-[11px] rounded-[2px]', c.filled ? 'bg-[var(--heat-5)]' : 'bg-[var(--heat-0)]')}
+                  className={cn(
+                    'size-[11px] rounded-[2px]',
+                    c.filled ? 'bg-ink' : 'bg-[var(--heat-0)]',
+                    c.date === today && 'ring-1 ring-accent ring-offset-1 ring-offset-paper',
+                  )}
                 />
               ),
             )}

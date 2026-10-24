@@ -111,7 +111,7 @@ export function useSpring(value: number, cfg: SpringConfig): Spring {
 export function useSpringNumber(target: number, cfg?: Partial<SpringConfig>): number {
   const s = useSpring(target, { stiffness: cfg?.stiffness ?? 48, damping: cfg?.damping ?? 12 });
   const [v, setV] = useState(target);
-  useEffect(() => s.onFrame(() => setV(s.value)), [s]);
+  useEffect(() => s.onFrame(() => setV(Math.round(s.value))), [s]);
   useEffect(() => {
     s.setTarget(target);
   }, [s, target]);
