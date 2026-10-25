@@ -37,12 +37,12 @@ export function TodayView() {
         <div className="flex items-end justify-between gap-8 border-b-2 border-ink pb-8">
           <div className="min-w-0">
             <p className="mono-label text-ink-3">The daily record · week {isoWeek(today)}</p>
-            <h1 className="mt-4 font-serif text-[56px] leading-[0.92] text-ink sm:text-[72px]">
+            <h1 className="mt-4 font-display text-[56px] font-semibold leading-[1.02] tracking-[-0.015em] text-ink sm:text-[72px]">
               <span className="block">{date ? date.weekday : formatHuman(today)}</span>
               {date && (
                 <span className="block">
                   {date.day}&nbsp;
-                  <em className="text-ink-2">{date.rest}</em>
+                  <span className="font-normal text-ink-2">{date.rest}</span>
                 </span>
               )}
             </h1>
@@ -50,7 +50,7 @@ export function TodayView() {
 
           <div className="shrink-0 text-right">
             <p className="mono-label text-ink-3">Checked in</p>
-            <p aria-hidden className="tnum mt-2 font-serif leading-[0.8]" style={{ fontVariantNumeric: 'tabular-nums' }}>
+            <p aria-hidden className="tnum mt-2 font-display font-semibold leading-[0.85] tracking-[-0.015em]" style={{ fontVariantNumeric: 'tabular-nums' }}>
               <span className="text-[64px] text-ink sm:text-[76px]">{done}</span>
               <span className="text-[30px] text-ink-3 sm:text-[36px]">/{active.length}</span>
             </p>

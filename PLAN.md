@@ -274,12 +274,13 @@ History grid ramp (accent mixed into paper, 5 steps): `#EFDFD7`, `#E6C1B5`,
 
 | Role | Face | Notes |
 |---|---|---|
-| Display / dates / empty states | **Instrument Serif** 400 (+italic) | editorial voice, never bold |
-| UI / body / forms | **Instrument Sans** (variable) | 400/500/600 |
-| Data / labels / streaks | **JetBrains Mono** (variable) | 11–12 px, `tabular-nums` |
+| Display / dates / empty states | **SF Pro Display** (native on Apple devices) | 600, tracking −0.005…−0.015em — the apple.com hero voice |
+| UI / body / forms | **SF Pro Text** (system) → **Roboto Variable** (bundled) elsewhere | 400/500/600, body tracking −0.006em class |
+| Data / labels / streaks | **IBM Plex Mono** | 11–12 px, `tabular-nums`, machine voice |
 
-Scale: `12 · 13 · 15 · 17 · 22 · 28 · 40` px. Display line-height 1.2, body
-1.5. `+0.06em` tracking on 11–12 px uppercase mono labels; `−0.01em` from 22 px up.
+Scale: `12 · 13 · 15 · 17 · 22 · 34 · 40 · 48 · 56` px (display). Display line-height
+1.02–1.08 with −0.015em at hero sizes; body 1.47. `+0.08em` on 11 px uppercase mono
+labels; Apple's optical tracking curve: smaller type opens up, larger tightens.
 
 ### 7.3 Geometry, elevation, motion
 

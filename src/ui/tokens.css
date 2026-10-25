@@ -1,13 +1,15 @@
-/* Hand-picked palette — warm carbon, cream ink, one signal accent.
-   The ledger now shares the studio's darkness: its own night-plate. */
+/* Palette — Apple-web neutrals on true black, one signal accent kept from the studio.
+   Type: system SF Pro resolves as the Apple-website stack on Apple devices;
+   Roboto (Google's open sans, bundled) carries every other platform. Plex Mono stays
+   as the machine voice. */
 :root {
-  --paper: #0a0908;
-  --paper-2: #161411;
-  --surface: #131210;
-  --ink: #ebe7dd;
-  --ink-2: #a19c90;
-  --ink-3: #6e6a60;
-  --hairline: #262420;
+  --paper: #060607;
+  --paper-2: #141416;
+  --surface: #101012;
+  --ink: #f5f5f7;
+  --ink-2: #a1a1a6;
+  --ink-3: #6e6e73;
+  --hairline: #3a3a3c;
   --accent: #d84b1f;
   --accent-hover: #be3f16;
 
@@ -26,9 +28,8 @@
   --a-pine: #4e9180;
   --a-graphite: #9aa0a6;
 
-  /* History grid ramp (accent mixed into carbon). v2 ready; v1 uses
-     heat-0 (empty) with ink fills and an accent today-ring. */
-  --heat-0: #1f1d1a;
+  /* History grid ramp (accent mixed into carbon). */
+  --heat-0: #1c1c1e;
   --heat-1: #2a2018;
   --heat-2: #46271c;
   --heat-3: #6b3222;

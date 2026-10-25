@@ -76,7 +76,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
             className,
           )}
         >
-          <h2 className="font-serif text-[22px] font-normal leading-tight text-ink">{title}</h2>
+          <h2 className="font-display text-[22px] font-semibold leading-tight tracking-[-0.005em] text-ink">{title}</h2>
           <div className="mt-4">{children}</div>
         </div>
       </div>

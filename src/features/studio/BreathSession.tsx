@@ -233,7 +233,7 @@ export function BreathSession() {
           Breathwork
         </span>
 
-        <h2 className="mt-5 min-h-[2.4em] font-serif text-[44px] leading-[1.08] text-[#FFF6EA] sm:text-[56px]" aria-live="polite">
+        <h2 className="mt-5 min-h-[2.4em] font-display text-[44px] font-semibold leading-[1.08] tracking-[-0.01em] text-[#FFF6EA] sm:text-[56px]" aria-live="polite">
           <span key={cycleLabel} className="studio-line-swap inline-block">
             {cycleLabel}
           </span>

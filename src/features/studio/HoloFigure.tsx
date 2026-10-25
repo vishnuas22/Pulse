@@ -271,7 +271,7 @@ export function HoloFigure({ habits, logs, pending, onToggle }: HoloFigureProps)
 
       {/* score */}
       <div className="mt-[-24px] text-center">
-        <div className="font-serif text-[64px] leading-none text-[#F4FFC8] tabular-nums" aria-live="polite">
+        <div className="font-display text-[64px] font-semibold leading-none tracking-[-0.015em] text-[#F4FFC8] tabular-nums" aria-live="polite">
           {scoreShown}
           <span className="text-[#95BC2E]">%</span>
         </div>

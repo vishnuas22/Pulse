@@ -61,7 +61,7 @@ export function SettingsView() {
       <header className="pt-10 pb-6">
         <div className="border-b-2 border-ink pb-6">
           <p className="mono-label text-ink-3">Settings</p>
-          <h1 className="mt-3 font-serif text-[48px] leading-none text-ink">Preferences</h1>
+          <h1 className="mt-3 font-display text-[48px] font-semibold leading-none tracking-[-0.01em] text-ink">Preferences</h1>
         </div>
       </header>
 

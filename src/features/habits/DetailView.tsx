@@ -62,7 +62,7 @@ export function DetailView() {
           <div className="min-w-0">
             <div className="flex items-center gap-2.5">
               <span aria-hidden className={cn('size-2.5 rounded-full', ACCENT_CLASSES[habit.accent].dot)} />
-              <h1 className="font-serif text-[40px] leading-[1.05] text-ink">{habit.name}</h1>
+              <h1 className="font-display text-[40px] font-semibold leading-[1.05] tracking-[-0.01em] text-ink">{habit.name}</h1>
             </div>
             <p className="tnum mt-2 font-mono text-[12px] text-ink-2">
               {habit.targetPerWeek}/wk · created {formatShort(habit.createdAt.slice(0, 10))}
@@ -108,7 +108,7 @@ export function DetailView() {
           ).map(([label, value]) => (
             <div key={label} className="px-4 py-4 first:border-l-0">
               <dt className="mono-label text-ink-3">{label}</dt>
-              <dd className="tnum mt-3 font-serif text-[34px] leading-none text-ink">{value}</dd>
+              <dd className="tnum mt-3 font-display text-[34px] font-semibold leading-none tracking-[-0.005em] text-ink">{value}</dd>
             </div>
           ))}
         </dl>

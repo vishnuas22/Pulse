@@ -116,7 +116,7 @@ export function Momentum({ habits, logs }: MomentumProps) {
     <section id="studio-momentum" className="relative bg-[#0a0a08] px-6 pb-32 pt-28">
       <div className="mx-auto w-full max-w-[1080px]">
         <p className="mono-label text-[11px] text-[#EC6517]">04 — MOMENTUM</p>
-        <h2 ref={headRef} className="mt-4 max-w-[520px] font-serif text-[44px] leading-[1.06] text-[#F1EDE4] sm:text-[56px]">
+        <h2 ref={headRef} className="mt-4 max-w-[520px] font-display text-[44px] font-semibold leading-[1.06] tracking-[-0.01em] text-[#F1EDE4] sm:text-[56px]">
           The route your repetition has carved.
         </h2>
 
@@ -130,7 +130,7 @@ export function Momentum({ habits, logs }: MomentumProps) {
             />
             <div className="absolute inset-0 bg-[#EC6517]/25 mix-blend-multiply" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a08]/70 via-transparent to-[#0a0a08]/30" />
-            <p className="absolute bottom-5 left-6 max-w-[280px] font-serif text-[20px] leading-snug text-[#FFF3E8]">
+            <p className="absolute bottom-5 left-6 max-w-[280px] font-text text-[14px] leading-snug tracking-[-0.006em] text-[#FFF3E8]">
               Pace is personal. Cadence is honest.
             </p>
           </div>
@@ -148,7 +148,7 @@ export function Momentum({ habits, logs }: MomentumProps) {
                   </span>
                   <div>
                     <p className="mono-label text-[10px] text-[#8a857a]">{row.label}</p>
-                    <p className="mt-1 font-serif text-[26px] leading-none text-[#F1EDE4] tabular-nums">{row.value}</p>
+                    <p className="mt-1 font-display text-[26px] font-semibold leading-none tracking-[-0.005em] text-[#F1EDE4] tabular-nums">{row.value}</p>
                     <p className="mt-1.5 text-[12px] leading-snug text-[#6d675c]">{row.sub}</p>
                   </div>
                 </div>

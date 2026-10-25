@@ -162,7 +162,7 @@ export function StudioPage() {
       <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? "border-b border-[#ffffff0f] bg-[#060606]/80 backdrop-blur-xl" : "border-b border-transparent"}`}>
         <div className="mx-auto flex h-16 w-full max-w-[1140px] items-center justify-between px-6">
           <Link to="/studio" className="flex items-baseline gap-1.5">
-            <span className="font-serif text-[16px] tracking-[0.2em] text-[#F1EDE4]">PULSE</span>
+            <span className="font-display text-[15px] font-semibold tracking-[0.2em] text-[#F1EDE4]">PULSE</span>
             <span className="mb-0.5 inline-block size-1.5 rounded-full bg-[#EC6517] studio-loader-dot" aria-hidden />
           </Link>
           <nav aria-label="Studio" className="hidden items-center gap-7 md:flex">
@@ -209,7 +209,7 @@ export function StudioPage() {
               </p>
               <h1
                 ref={heroType}
-                className="studio-reveal mt-6 max-w-[720px] font-serif text-[64px] leading-[0.98] text-[#FFF6EA] sm:text-[92px]"
+                className="studio-reveal mt-6 max-w-[720px] font-display text-[64px] font-semibold leading-[0.98] tracking-[-0.015em] text-[#FFF6EA] sm:text-[92px]"
               >
                 Rituals,
                 <br />
@@ -256,7 +256,7 @@ export function StudioPage() {
             <div className="mx-auto w-full max-w-[1140px]">
               <p className="mono-label text-[11px] text-[#C9E96E]">02 — THE VISION</p>
               <div className="mt-4 flex flex-wrap items-end justify-between gap-6">
-                <h2 className="max-w-[460px] font-serif text-[44px] leading-[1.04] text-[#F1EDE4] sm:text-[56px]">
+                <h2 className="max-w-[460px] font-display text-[44px] font-semibold leading-[1.04] tracking-[-0.01em] text-[#F1EDE4] sm:text-[56px]">
                   The body keeps the score.
                 </h2>
                 <p className="max-w-[340px] text-[13px] leading-relaxed text-[#8a857a]">
@@ -268,7 +268,7 @@ export function StudioPage() {
                 {/* left card */}
                 <div className="rounded-[24px] border border-[#26251f] bg-[#111110] p-6">
                   <p className="mono-label text-[10px] text-[#8a857a]">PULSE INDEX</p>
-                  <p className="mt-3 font-serif text-[44px] leading-none text-[#F1EDE4] tabular-nums">
+                  <p className="mt-3 font-display text-[44px] font-semibold leading-none tracking-[-0.005em] text-[#F1EDE4] tabular-nums">
                     {score}
                     <span className="text-[#C9E96E]">%</span>
                   </p>
@@ -365,7 +365,7 @@ export function StudioPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a08] via-transparent to-[#060606]" />
             <Embers className="absolute inset-0 size-full" rate={12} interactive={false} />
             <div className="relative z-10 px-6">
-              <h2 className="font-serif text-[52px] leading-[1.02] text-[#FFF6EA] sm:text-[72px]">Keep the streak alive.</h2>
+              <h2 className="font-display text-[52px] font-semibold leading-[1.02] tracking-[-0.01em] text-[#FFF6EA] sm:text-[72px]">Keep the streak alive.</h2>
               <p className="mx-auto mt-4 max-w-[380px] text-[14px] leading-relaxed text-[#FFEFDE]/85">
                 The studio reads your ledger in real time — every check-in you land tonight restages tomorrow's light.
               </p>

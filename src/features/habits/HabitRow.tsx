@@ -58,7 +58,7 @@ export function HabitRow({
       <button
         type="button"
         onClick={() => navigate(`/habits/${habit.id}`)}
-        className="min-w-0 flex-1 truncate text-left font-serif text-[19px] leading-tight text-ink decoration-ink/30 underline-offset-4 hover:underline"
+        className="min-w-0 flex-1 truncate text-left font-text text-[17px] font-semibold leading-tight tracking-[-0.006em] text-ink decoration-ink/30 underline-offset-4 hover:underline"
       >
         {habit.name}
       </button>

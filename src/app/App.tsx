@@ -71,7 +71,7 @@ function Layout() {
         <div className="mx-auto w-full max-w-[840px] px-6">
           <div className="flex h-[76px] items-center justify-between">
             <Link to="/" className="flex items-baseline gap-2.5">
-              <span className="font-serif text-[27px] leading-none tracking-tight text-ink">
+              <span className="font-display text-[27px] font-semibold leading-none tracking-[-0.01em] text-ink">
                 Pulse<span className="text-accent">.</span>
               </span>
               <span className="mono-label hidden text-[9px] text-ink-3 sm:inline">A habit ledger</span>

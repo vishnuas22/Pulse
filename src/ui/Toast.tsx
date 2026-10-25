@@ -65,7 +65,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             <span aria-hidden className="mono-label mt-1 shrink-0 text-[8px] text-ink-3">
               {t.kind === 'danger' ? 'Failed' : 'Noted'}
             </span>
-            <span className={cn('flex-1 font-serif text-[14px] leading-snug', t.kind === 'danger' ? 'text-ink' : 'text-ink-2')}>{t.message}</span>
+            <span className={cn('flex-1 font-text text-[14px] leading-snug tracking-[-0.006em]', t.kind === 'danger' ? 'text-ink' : 'text-ink-2')}>{t.message}</span>
             {t.action && (
               <Button
                 size="sm"

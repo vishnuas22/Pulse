@@ -15,8 +15,8 @@ export function EmptyState({ title, body, action, className, align = 'start' }: 
   return (
     <div className={cn('flex flex-col gap-3 py-16', centered ? 'items-center text-center' : 'items-start', className)}>
       <div aria-hidden className={cn('h-px w-14 bg-ink/50', centered && 'mx-auto')} />
-      <h2 className="font-serif text-[34px] leading-tight text-ink">{title}</h2>
-      {body && <p className="max-w-md font-serif text-[15px] leading-normal text-ink-2">{body}</p>}
+      <h2 className="font-display text-[34px] font-semibold leading-tight tracking-[-0.005em] text-ink">{title}</h2>
+      {body && <p className="max-w-md font-text text-[15px] leading-normal tracking-[-0.006em] text-ink-2">{body}</p>}
       {action && <div className="mt-2">{action}</div>}
     </div>
   );
