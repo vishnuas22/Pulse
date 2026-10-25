@@ -5,7 +5,8 @@
                  using fetch(), then swap exactly this one line. No component
                  below this seam changes. */
 
-import type { HabitApi } from './types';
-import { createLocalApi } from './local';
+import type { DayApi, HabitApi } from './types';
+import { createLocalApi, createLocalDayApi } from './local';
 
 export const habitApi: HabitApi = createLocalApi();
+export const dayApi: DayApi = createLocalDayApi();

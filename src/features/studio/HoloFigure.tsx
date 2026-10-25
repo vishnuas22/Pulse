@@ -10,6 +10,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Habit, HabitId, DateKey } from "@/api/types";
 import { todayKey } from "@/lib/date";
+import { callusState, checkedLast7, emberState, postureLevel } from "@/lib/stats";
 import { useSpring, useSpringNumber } from "./physics";
 
 interface HoloFigureProps {
@@ -54,6 +55,30 @@ function connector(s: Slot): string {
   return `M${s.ax} ${s.ay} Q${cpx} ${cpy} ${s.x} ${s.y - s.r - 2}`;
 }
 
+/* Ember decay — lime-family only. A cooling ritual must never read as danger
+   (amber/red belongs to the cinnabar signal), so heat falls through the
+   brand's own greens: lime → moss → charcoal. */
+const EMBER_STOPS = ["#C9E96E", "#A9C45B", "#8FAE44", "#3A3D31"];
+
+function mixHex(a: string, b: string, t: number): string {
+  const w = Math.min(1, Math.max(0, t));
+  const ar = parseInt(a.slice(1, 3), 16);
+  const ag = parseInt(a.slice(3, 5), 16);
+  const ab = parseInt(a.slice(5, 7), 16);
+  const br = parseInt(b.slice(1, 3), 16);
+  const bg = parseInt(b.slice(3, 5), 16);
+  const bb = parseInt(b.slice(5, 7), 16);
+  const ch = (v: number) => Math.round(v).toString(16).padStart(2, "0");
+  return `#${ch(ar + (br - ar) * w)}${ch(ag + (bg - ag) * w)}${ch(ab + (bb - ab) * w)}`;
+}
+
+/** Level 1 → hot lime, level 0 → charcoal with a trace of moss. */
+function emberColor(level: number): string {
+  const span = (EMBER_STOPS.length - 1) * Math.min(1, Math.max(0, 1 - level));
+  const i = Math.min(Math.floor(span), EMBER_STOPS.length - 1);
+  return mixHex(EMBER_STOPS[i] ?? "#3A3D31", EMBER_STOPS[i + 1] ?? "#3A3D31", span - i);
+}
+
 function scoreCopy(score: number, total: number): string {
   if (total === 0) return "No rituals yet — open the ledger and plant the first one.";
   if (score >= 100) return "Every ritual honored. The streak is breathing on its own.";
@@ -71,13 +96,25 @@ export function HoloFigure({ habits, logs, pending, onToggle }: HoloFigureProps)
   const isDone = (id: HabitId): boolean => (logs[id] ?? []).includes(today);
   const doneN = shown.filter((h) => isDone(h.id)).length;
   const score = shown.length === 0 ? 0 : Math.round((doneN / shown.length) * 100);
+
+  /* Posture — the whole week's momentum, not today's binary. The spine bows
+     with the trailing seven days measured against the weekly targets; one
+     check-in visibly starts to straighten it. */
+  const posture = useMemo(() => {
+    const done7 = active.reduce((sum, h) => sum + checkedLast7(logs[h.id] ?? [], today), 0);
+    const target = active.reduce((sum, h) => sum + h.targetPerWeek, 0);
+    return postureLevel(done7, target);
+  }, [active, logs, today]);
+
   const rootRef = useRef<HTMLDivElement | null>(null);
   const bodyRef = useRef<SVGGElement | null>(null);
   const nodeLayerRef = useRef<SVGGElement | null>(null);
+  const postureRef = useRef<SVGGElement | null>(null);
 
-  // Cursor lean — springs write SVG transforms, no re-renders.
+  // Cursor lean + spinal bow — springs write SVG transforms, no re-renders.
   const leanX = useSpring(0, { stiffness: 60, damping: 14 });
   const leanY = useSpring(0, { stiffness: 60, damping: 14 });
+  const bow = useSpring(0, { stiffness: 48, damping: 16 });
 
   useEffect(() => {
     const el = rootRef.current;
@@ -104,16 +141,28 @@ export function HoloFigure({ habits, logs, pending, onToggle }: HoloFigureProps)
         "style",
         `transform: translate(${leanX.value * -16}px, ${leanY.value * -10}px); transform-origin: 210px 330px;`,
       );
+      postureRef.current?.setAttribute(
+        "style",
+        `transform: rotate(${bow.value}deg); transform-origin: 210px 648px;`,
+      );
     };
     const u1 = leanX.onFrame(render);
     const u2 = leanY.onFrame(render);
+    const u3 = bow.onFrame(render);
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerleave", onLeave);
       u1();
       u2();
+      u3();
     };
-  }, [leanX, leanY]);
+  }, [leanX, leanY, bow]);
+
+  // The bow retargets with the week — setTarget instant-jumps under
+  // prefers-reduced-motion, so no separate RM branch is needed.
+  useEffect(() => {
+    bow.setTarget((1 - posture) * 2.6);
+  }, [bow, posture]);
 
   const [focusId, setFocusId] = useState<HabitId | null>(null);
   const scoreShown = useSpringNumber(score, { stiffness: 34, damping: 11 });
@@ -156,42 +205,45 @@ export function HoloFigure({ habits, logs, pending, onToggle }: HoloFigureProps)
         {/* ambient aura */}
         <ellipse cx="210" cy="340" rx="150" ry="270" fill="#a4c63a" opacity="0.07" filter="url(#pulse-figBlurL)" />
 
-        <g ref={bodyRef} className="holo-breath">
-          {/* glow pass — group-filtered so overlaps don't double-darken */}
-          <g filter="url(#pulse-figBlurL)" opacity="0.8">
-            <path d={BODY} fill="#A8CF4C" opacity="0.55" />
-            <path d={ARM_L} fill="#A8CF4C" opacity="0.5" />
-            <path d={ARM_R} fill="#A8CF4C" opacity="0.5" />
+        {/* posture wrap — the outer group pivots the whole stance at the feet */}
+        <g ref={postureRef}>
+          <g ref={bodyRef} className="holo-breath">
+            {/* glow pass — group-filtered so overlaps don't double-darken */}
+            <g filter="url(#pulse-figBlurL)" opacity="0.8">
+              <path d={BODY} fill="#A8CF4C" opacity="0.55" />
+              <path d={ARM_L} fill="#A8CF4C" opacity="0.5" />
+              <path d={ARM_R} fill="#A8CF4C" opacity="0.5" />
+            </g>
+
+            {/* arms beneath, torso over — shared user-space gradients keep the union seamless */}
+            <path d={ARM_L} fill="url(#pulse-figArmFill)" />
+            <path d={ARM_R} fill="url(#pulse-figArmFill)" />
+            <path d={BODY} fill="url(#pulse-figFill)" />
+
+            {/* rim light from the right; body stroke masked out where arms overlap */}
+            <path d={BODY} fill="none" stroke="url(#pulse-figRim)" strokeWidth="1.1" mask="url(#pulse-figBodyMask)" />
+            <path d={ARM_R} fill="none" stroke="url(#pulse-figRim)" strokeWidth="1.1" />
+            <path d={ARM_L} fill="none" stroke="url(#pulse-figRim)" strokeWidth="1.1" />
+
+            {/* anatomy hints */}
+            <g stroke="#EEFFB8" strokeOpacity="0.3" strokeWidth="1" fill="none">
+              {HINTS.map((d, i) => (
+                <path key={`hint-${i}`} d={d} />
+              ))}
+            </g>
+
+            {/* scan shimmer sweeping inside the torso */}
+            <g clipPath="url(#pulse-figClip)">
+              <rect x="140" y="130" width="140" height="34" fill="#E9FF9E" opacity="0.13">
+                <animate attributeName="y" from="130" to="360" dur="5.2s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0;0.14;0" dur="5.2s" repeatCount="indefinite" />
+              </rect>
+            </g>
+
+            {/* faint field lines */}
+            <line x1="210" y1="20" x2="210" y2="706" stroke="#C9E96E" strokeOpacity="0.1" strokeWidth="0.6" />
+            <line x1="126" y1="151" x2="294" y2="151" stroke="#C9E96E" strokeOpacity="0.08" strokeWidth="0.6" />
           </g>
-
-          {/* arms beneath, torso over — shared user-space gradients keep the union seamless */}
-          <path d={ARM_L} fill="url(#pulse-figArmFill)" />
-          <path d={ARM_R} fill="url(#pulse-figArmFill)" />
-          <path d={BODY} fill="url(#pulse-figFill)" />
-
-          {/* rim light from the right; body stroke masked out where arms overlap */}
-          <path d={BODY} fill="none" stroke="url(#pulse-figRim)" strokeWidth="1.1" mask="url(#pulse-figBodyMask)" />
-          <path d={ARM_R} fill="none" stroke="url(#pulse-figRim)" strokeWidth="1.1" />
-          <path d={ARM_L} fill="none" stroke="url(#pulse-figRim)" strokeWidth="1.1" />
-
-          {/* anatomy hints */}
-          <g stroke="#EEFFB8" strokeOpacity="0.3" strokeWidth="1" fill="none">
-            {HINTS.map((d, i) => (
-              <path key={`hint-${i}`} d={d} />
-            ))}
-          </g>
-
-          {/* scan shimmer sweeping inside the torso */}
-          <g clipPath="url(#pulse-figClip)">
-            <rect x="140" y="130" width="140" height="34" fill="#E9FF9E" opacity="0.13">
-              <animate attributeName="y" from="130" to="360" dur="5.2s" repeatCount="indefinite" />
-              <animate attributeName="opacity" values="0;0.14;0" dur="5.2s" repeatCount="indefinite" />
-            </rect>
-          </g>
-
-          {/* faint field lines */}
-          <line x1="210" y1="20" x2="210" y2="706" stroke="#C9E96E" strokeOpacity="0.1" strokeWidth="0.6" />
-          <line x1="126" y1="151" x2="294" y2="151" stroke="#C9E96E" strokeOpacity="0.08" strokeWidth="0.6" />
         </g>
 
         {/* ground glow */}
@@ -207,6 +259,11 @@ export function HoloFigure({ habits, logs, pending, onToggle }: HoloFigureProps)
             }
             const done = isDone(habit.id);
             const busy = pending.includes(habit.id);
+            const ember = emberState(logs[habit.id] ?? [], today);
+            const callus = callusState(logs[habit.id] ?? [], today);
+            const cool = !done && ember.level > 0; // yesterday's ritual, still warm
+            const heat = emberColor(ember.level);
+            const faceWidth = Math.min(1 + callus.pool * 0.75, 3.2); // callus thickens the tissue
             return (
               <g key={habit.id}>
                 <path
@@ -215,8 +272,8 @@ export function HoloFigure({ habits, logs, pending, onToggle }: HoloFigureProps)
                   pathLength={1}
                   className="holo-draw"
                   style={{ animationDelay: `${i * 0.12 + 0.2}s` }}
-                  stroke={done ? "#D9F28D" : "#EC6517"}
-                  strokeOpacity={done ? 0.55 : 0.16}
+                  stroke={done ? "#D9F28D" : cool ? heat : "#EC6517"}
+                  strokeOpacity={done ? 0.55 : cool ? 0.18 + 0.22 * ember.level : 0.16}
                   strokeWidth={done ? 1.1 : 0.8}
                 />
                 <g
@@ -236,7 +293,14 @@ export function HoloFigure({ habits, logs, pending, onToggle }: HoloFigureProps)
                   onFocus={() => setFocusId(habit.id)}
                   onBlur={() => setFocusId(null)}
                 >
-                  <circle r={s.r} fill="#12140B" fillOpacity="0.9" stroke={done ? "rgba(217,242,141,0.85)" : "rgba(236,233,226,0.17)"} strokeWidth="1" />
+                  <circle
+                    r={s.r}
+                    fill="#12140B"
+                    fillOpacity="0.9"
+                    stroke={done ? "rgba(217,242,141,0.85)" : cool ? heat : "rgba(236,233,226,0.17)"}
+                    strokeOpacity={cool ? 0.2 + 0.6 * ember.level : undefined}
+                    strokeWidth={faceWidth}
+                  />
                   <circle
                     r={s.r}
                     fill="none"
@@ -248,9 +312,18 @@ export function HoloFigure({ habits, logs, pending, onToggle }: HoloFigureProps)
                   {busy ? (
                     <circle r={s.r * 0.45} fill="none" stroke="#E9FF9E" strokeWidth="1.6" strokeDasharray="14 40" className="holo-spin" strokeLinecap="round" />
                   ) : (
-                    <circle r={done ? 4.4 : 2.6} cx={0} cy={0} fill={done ? "#F2FFC4" : "#A8A29E"} />
+                    <circle
+                      r={done ? 4.4 : cool && ember.level >= 0.3 ? 3.2 : 2.6}
+                      cx={0}
+                      cy={0}
+                      fill={done ? "#F2FFC4" : cool ? heat : "#A8A29E"}
+                    />
                   )}
-                  {done ? <circle r={s.r * 0.45} fill="#95BC2E" fillOpacity="0.16" /> : null}
+                  {done ? (
+                    <circle r={s.r * 0.45} fill="#95BC2E" fillOpacity="0.16" />
+                  ) : cool ? (
+                    <circle r={s.r * 0.45} fill={heat} fillOpacity={0.16 * ember.level} />
+                  ) : null}
                   <text
                     y={s.r + 16}
                     textAnchor="middle"

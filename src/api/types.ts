@@ -41,6 +41,8 @@ export interface PulseDB {
   version: 1;
   habits: Habit[];
   logs: HabitLog[];
+  /** Days the ledger ceremony has closed (Today → the seal). Optional/legacy. */
+  closedDays?: DateKey[];
 }
 
 /** What deleteHabit returns — the minimum needed for a client-side undo. */
@@ -60,4 +62,10 @@ export interface HabitApi {
   listLogs(id: HabitId): Promise<DateKey[]>;
   setLog(id: HabitId, date: DateKey): Promise<void>;
   clearLog(id: HabitId, date: DateKey): Promise<void>;
+}
+
+/** The closing ceremony is its own small domain: days the plate is sealed. */
+export interface DayApi {
+  listClosed(): Promise<DateKey[]>;
+  setDayClosed(date: DateKey, closed: boolean): Promise<void>;
 }

@@ -10,6 +10,7 @@ import {
   NOTES_MAX,
   type AccentKey,
   type DateKey,
+  type DayApi,
   type Habit,
   type HabitApi,
   type HabitId,
@@ -81,7 +82,11 @@ function migrate(raw: unknown): PulseDB {
   if (!db || db.version !== 1 || !Array.isArray(db.habits) || !Array.isArray(db.logs)) {
     throw new ApiError('storage', 'Unrecognized local data — restore or reset from Settings.', 500);
   }
-  return db as PulseDB;
+  // closedDays is additive/optional — older exports load unchanged.
+  const closedDays = Array.isArray(db.closedDays)
+    ? db.closedDays.filter((d): d is DateKey => typeof d === 'string')
+    : [];
+  return { version: 1, habits: db.habits, logs: db.logs, closedDays };
 }
 
 function load(): PulseDB {
@@ -262,6 +267,44 @@ export function createLocalApi(): HabitApi {
           const before = db.logs.length;
           db.logs = db.logs.filter((l) => !(l.habitId === id && l.date === date));
           if (db.logs.length !== before) persist(db);
+        }),
+      ),
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* The closing ceremony (DayApi)                                       */
+/* ------------------------------------------------------------------ */
+
+/* closedDays normalizes at load, but the type stays optional for older
+   on-disk data — all access goes through this one door. */
+function closedOf(db: PulseDB): DateKey[] {
+  return db.closedDays ?? [];
+}
+
+function assertDateKey(date: string): DateKey {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    throw new ApiError('validation', 'Dates are YYYY-MM-DD.', 400);
+  }
+  return date;
+}
+
+export function createLocalDayApi(): DayApi {
+  return {
+    listClosed: () => transport(() => [...closedOf(load())].sort()),
+
+    setDayClosed: (date, closed) =>
+      serialize(() =>
+        transport(() => {
+          const key = assertDateKey(date);
+          const db = load();
+          const list = closedOf(db);
+          const has = list.includes(key);
+          if (closed && !has) {
+            persist({ ...db, closedDays: [...list, key] });
+          } else if (!closed && has) {
+            persist({ ...db, closedDays: list.filter((d) => d !== key) });
+          }
         }),
       ),
   };

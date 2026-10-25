@@ -10,7 +10,7 @@ import { ConfirmDialog, Modal } from '@/ui/Modal';
 import { LoadingBlock } from '@/ui/Spinner';
 import { useToast } from '@/ui/Toast';
 import { formatShort } from '@/lib/date';
-import { checkedLast7, currentStreak, longestStreak } from '@/lib/stats';
+import { callusState, checkedLast7, currentStreak, longestStreak } from '@/lib/stats';
 import { HabitForm } from './HabitForm';
 import { HistoryGrid } from './HistoryGrid';
 
@@ -42,6 +42,7 @@ export function DetailView() {
   }
 
   const dates = logs[habit.id] ?? [];
+  const { pool: callusPool } = callusState(dates);
   const isArchived = habit.archivedAt !== null;
 
   return (
@@ -109,6 +110,9 @@ export function DetailView() {
             <div key={label} className="px-4 py-4 first:border-l-0">
               <dt className="mono-label text-ink-3">{label}</dt>
               <dd className="tnum mt-3 font-display text-[34px] font-semibold leading-none tracking-[-0.005em] text-ink">{value}</dd>
+              {label === 'Current streak' && callusPool > 0 && (
+                <p className="tnum mt-2 font-mono text-[10px] tracking-[0.08em] text-ink-3">callus ×{callusPool}</p>
+              )}
             </div>
           ))}
         </dl>

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useReducer, type ReactNode } from 'react';
 import { ApiError } from '@/api/error';
-import { habitApi } from '@/api/habits';
+import { dayApi, habitApi } from '@/api/habits';
 import type { DateKey, DeletedHabit, Habit, HabitId, HabitPatch, NewHabit } from '@/api/types';
 import { todayKey } from '@/lib/date';
 
@@ -11,22 +11,25 @@ interface HabitsState {
   logs: Record<HabitId, DateKey[]>;
   /** ids with a mutation in flight — drives per-row pending states */
   pending: HabitId[];
+  /** Days the ledger has sealed. */
+  closed: DateKey[];
 }
 
 type Action =
   | { type: 'error'; message: string }
-  | { type: 'ready'; habits: Habit[]; logs: Record<HabitId, DateKey[]> }
+  | { type: 'ready'; habits: Habit[]; logs: Record<HabitId, DateKey[]>; closed: DateKey[] }
   | { type: 'upsert'; habit: Habit }
   | { type: 'setLogs'; habitId: HabitId; dates: DateKey[] }
   | { type: 'remove'; habitId: HabitId }
-  | { type: 'pending'; habitId: HabitId; value: boolean };
+  | { type: 'pending'; habitId: HabitId; value: boolean }
+  | { type: 'closed'; dates: DateKey[] };
 
-const initial: HabitsState = { status: 'loading', habits: [], logs: {}, pending: [] };
+const initial: HabitsState = { status: 'loading', habits: [], logs: {}, pending: [], closed: [] };
 
 function reducer(state: HabitsState, action: Action): HabitsState {
   switch (action.type) {
     case 'ready':
-      return { status: 'ready', error: undefined, habits: action.habits, logs: action.logs, pending: [] };
+      return { status: 'ready', error: undefined, habits: action.habits, logs: action.logs, closed: action.closed, pending: [] };
     case 'error':
       return { ...state, status: 'error', error: action.message };
     case 'upsert': {
@@ -48,6 +51,8 @@ function reducer(state: HabitsState, action: Action): HabitsState {
         : state.pending.filter((id) => id !== action.habitId);
       return { ...state, pending };
     }
+    case 'closed':
+      return { ...state, closed: action.dates };
   }
 }
 
@@ -64,6 +69,9 @@ interface HabitsContextValue {
   toggle(id: HabitId): Promise<void>;
   restore(snapshot: DeletedHabit): Promise<void>;
   logsFor(id: HabitId): DateKey[];
+  closed: DateKey[];
+  /** Seal or reopen a day's plate — optimistic like the check-ins. */
+  setDayClosed(date: DateKey, closed: boolean): Promise<void>;
 }
 
 const HabitsContext = createContext<HabitsContextValue | null>(null);
@@ -81,8 +89,8 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
     let live = true;
     void (async () => {
       try {
-        const [habits, logs] = await Promise.all([habitApi.listHabits(), habitApi.listAllLogs()]);
-        if (live) dispatch({ type: 'ready', habits, logs });
+        const [habits, logs, closed] = await Promise.all([habitApi.listHabits(), habitApi.listAllLogs(), dayApi.listClosed()]);
+        if (live) dispatch({ type: 'ready', habits, logs, closed });
       } catch (e) {
         if (live) {
           dispatch({
@@ -101,8 +109,8 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
     ...state,
     refresh: async () => {
       try {
-        const [habits, logs] = await Promise.all([habitApi.listHabits(), habitApi.listAllLogs()]);
-        dispatch({ type: 'ready', habits, logs });
+        const [habits, logs, closed] = await Promise.all([habitApi.listHabits(), habitApi.listAllLogs(), dayApi.listClosed()]);
+        dispatch({ type: 'ready', habits, logs, closed });
       } catch (e) {
         dispatch({
           type: 'error',
@@ -172,6 +180,20 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
     },
 
     logsFor: (id) => state.logs[id] ?? [],
+
+    closed: state.closed,
+
+    // Seal/reopen joins the mutation ladder: optimistic dispatch, honest rollback.
+    setDayClosed: async (date, closed) => {
+      const previous = state.closed;
+      dispatch({ type: 'closed', dates: closed ? [...previous.filter((d) => d !== date), date].sort() : previous.filter((d) => d !== date) });
+      try {
+        await dayApi.setDayClosed(date, closed);
+      } catch (e) {
+        dispatch({ type: 'closed', dates: previous });
+        throw e instanceof ApiError ? e : new ApiError('unknown', 'Could not seal the day.');
+      }
+    },
   };
 
   return <HabitsContext.Provider value={value}>{children}</HabitsContext.Provider>;
