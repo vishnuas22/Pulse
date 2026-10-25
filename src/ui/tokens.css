@@ -1,37 +1,37 @@
-/* Hand-picked palette — warm paper, inky neutrals, one signal accent.
-   All values deliberate; see PLAN.md §7 before changing anything. */
+/* Hand-picked palette — warm carbon, cream ink, one signal accent.
+   The ledger now shares the studio's darkness: its own night-plate. */
 :root {
-  --paper: #f6f5f1;
-  --paper-2: #edebe5;
-  --surface: #ffffff;
-  --ink: #1a1918;
-  --ink-2: #57534e;
-  --ink-3: #a8a29e;
-  --hairline: #e7e5e1;
-  --accent: #bf3b1b;
-  --accent-hover: #a43216;
+  --paper: #0a0908;
+  --paper-2: #161411;
+  --surface: #131210;
+  --ink: #ebe7dd;
+  --ink-2: #a19c90;
+  --ink-3: #6e6a60;
+  --hairline: #262420;
+  --accent: #d84b1f;
+  --accent-hover: #be3f16;
 
-  --shadow-rest: 0 1px 2px rgb(26 25 24 / 0.06);
-  --shadow-raised: 0 8px 24px rgb(26 25 24 / 0.1);
+  --shadow-rest: 0 1px 0 rgb(0 0 0 / 0.4);
+  --shadow-raised: 0 16px 44px rgb(0 0 0 / 0.55);
 
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --dur-fast: 120ms;
   --dur: 180ms;
   --dur-slow: 240ms;
 
-  /* Habit accent swatches — muted, non-default, no blues or violets. */
-  --a-ember: #bf3b1b;
-  --a-moss: #5f6d22;
-  --a-honey: #96690a;
-  --a-pine: #2f5d50;
-  --a-graphite: #44474b;
+  /* Habit accent swatches — lifted for dark ground. */
+  --a-ember: #d84b1f;
+  --a-moss: #8fae44;
+  --a-honey: #c99b2e;
+  --a-pine: #4e9180;
+  --a-graphite: #9aa0a6;
 
-  /* History grid ramp (accent mixed into paper). Reserved for value-scale v2;
-     v1 renders binary today/no-today. Kept here as design tokens. */
-  --heat-0: #e7e5e1;
-  --heat-1: #efdfd7;
-  --heat-2: #e6c1b5;
-  --heat-3: #dc9b8a;
-  --heat-4: #ce6f57;
-  --heat-5: #bf3b1b;
+  /* History grid ramp (accent mixed into carbon). v2 ready; v1 uses
+     heat-0 (empty) with ink fills and an accent today-ring. */
+  --heat-0: #1f1d1a;
+  --heat-1: #2a2018;
+  --heat-2: #46271c;
+  --heat-3: #6b3222;
+  --heat-4: #97401f;
+  --heat-5: #d84b1f;
 }

@@ -63,7 +63,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
 
   return createPortal(
     <div className="fixed inset-0 z-50">
-      <div className="backdrop-in absolute inset-0 bg-ink/25" onMouseDown={onCloseRef.current} aria-hidden />
+      <div className="backdrop-in absolute inset-0 bg-black/60" onMouseDown={onCloseRef.current} aria-hidden />
       <div className="absolute inset-0 overflow-y-auto px-4 pb-10 pt-[10vh]">
         <div
           ref={panelRef}

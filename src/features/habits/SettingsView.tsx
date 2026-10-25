@@ -58,9 +58,11 @@ export function SettingsView() {
 
   return (
     <section>
-      <header className="pt-10 pb-2">
-        <p className="mono-label text-ink-3">Settings</p>
-        <h1 className="mt-2 font-serif text-[40px] leading-[1.05] text-ink">Preferences</h1>
+      <header className="pt-10 pb-6">
+        <div className="border-b-2 border-ink pb-6">
+          <p className="mono-label text-ink-3">Settings</p>
+          <h1 className="mt-3 font-serif text-[48px] leading-none text-ink">Preferences</h1>
+        </div>
       </header>
 
       <div className="border-t border-hairline">

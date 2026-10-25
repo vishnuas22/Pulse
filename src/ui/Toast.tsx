@@ -58,15 +58,19 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={t.id}
             role="status"
             className={cn(
-              'row-in pointer-events-auto flex items-center justify-between gap-3 rounded-card border bg-surface px-4 py-3 shadow-raised',
-              t.kind === 'danger' ? 'border-accent/40' : 'border-hairline',
+              'row-in pointer-events-auto flex items-start gap-3 border bg-surface px-4 py-3 shadow-raised',
+              t.kind === 'danger' ? 'border-accent/50' : 'border-hairline',
             )}
           >
-            <span className={cn('text-[13px]', t.kind === 'danger' ? 'text-ink' : 'text-ink-2')}>{t.message}</span>
+            <span aria-hidden className="mono-label mt-1 shrink-0 text-[8px] text-ink-3">
+              {t.kind === 'danger' ? 'Failed' : 'Noted'}
+            </span>
+            <span className={cn('flex-1 font-serif text-[14px] leading-snug', t.kind === 'danger' ? 'text-ink' : 'text-ink-2')}>{t.message}</span>
             {t.action && (
               <Button
                 size="sm"
                 variant="ghost"
+                className="mr-[-6px] mt-[-6px]"
                 onClick={() => {
                   t.action?.onClick();
                   dismiss(t.id);

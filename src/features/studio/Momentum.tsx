@@ -148,7 +148,7 @@ export function Momentum({ habits, logs }: MomentumProps) {
                   </span>
                   <div>
                     <p className="mono-label text-[10px] text-[#8a857a]">{row.label}</p>
-                    <p className="mt-1 font-sans text-[26px] font-medium leading-none text-[#F1EDE4] tabular-nums">{row.value}</p>
+                    <p className="mt-1 font-serif text-[26px] leading-none text-[#F1EDE4] tabular-nums">{row.value}</p>
                     <p className="mt-1.5 text-[12px] leading-snug text-[#6d675c]">{row.sub}</p>
                   </div>
                 </div>

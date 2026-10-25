@@ -9,12 +9,15 @@ export interface EmptyStateProps {
   align?: 'center' | 'start';
 }
 
-export function EmptyState({ title, body, action, className, align = 'center' }: EmptyStateProps) {
+/** An empty record, typeset: a rule, a serif line, a serif aside. Left-set by default. */
+export function EmptyState({ title, body, action, className, align = 'start' }: EmptyStateProps) {
+  const centered = align === 'center';
   return (
-    <div className={cn('flex flex-col gap-3 py-16', align === 'center' ? 'items-center text-center' : 'items-start', className)}>
-      <h2 className="font-serif text-[30px] leading-tight text-ink">{title}</h2>
-      {body && <p className="max-w-sm text-[14px] text-ink-2">{body}</p>}
-      {action}
+    <div className={cn('flex flex-col gap-3 py-16', centered ? 'items-center text-center' : 'items-start', className)}>
+      <div aria-hidden className={cn('h-px w-14 bg-ink/50', centered && 'mx-auto')} />
+      <h2 className="font-serif text-[34px] leading-tight text-ink">{title}</h2>
+      {body && <p className="max-w-md font-serif text-[15px] leading-normal text-ink-2">{body}</p>}
+      {action && <div className="mt-2">{action}</div>}
     </div>
   );
 }

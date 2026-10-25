@@ -59,7 +59,7 @@ function Layout() {
   }, [openCreate]);
 
   return (
-    <div className="min-h-dvh">
+    <div className="page-grain min-h-dvh">
       <a
         href="#content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[70] focus:rounded-input focus:bg-surface focus:px-3 focus:py-2 focus:text-[13px] focus:font-medium"

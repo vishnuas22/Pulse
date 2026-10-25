@@ -162,7 +162,7 @@ export function StudioPage() {
       <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? "border-b border-[#ffffff0f] bg-[#060606]/80 backdrop-blur-xl" : "border-b border-transparent"}`}>
         <div className="mx-auto flex h-16 w-full max-w-[1140px] items-center justify-between px-6">
           <Link to="/studio" className="flex items-baseline gap-1.5">
-            <span className="font-sans text-[15px] font-semibold tracking-[0.22em] text-[#F1EDE4]">PULSE</span>
+            <span className="font-serif text-[16px] tracking-[0.2em] text-[#F1EDE4]">PULSE</span>
             <span className="mb-0.5 inline-block size-1.5 rounded-full bg-[#EC6517] studio-loader-dot" aria-hidden />
           </Link>
           <nav aria-label="Studio" className="hidden items-center gap-7 md:flex">
@@ -268,7 +268,7 @@ export function StudioPage() {
                 {/* left card */}
                 <div className="rounded-[24px] border border-[#26251f] bg-[#111110] p-6">
                   <p className="mono-label text-[10px] text-[#8a857a]">PULSE INDEX</p>
-                  <p className="mt-3 font-sans text-[44px] font-medium leading-none text-[#F1EDE4] tabular-nums">
+                  <p className="mt-3 font-serif text-[44px] leading-none text-[#F1EDE4] tabular-nums">
                     {score}
                     <span className="text-[#C9E96E]">%</span>
                   </p>
